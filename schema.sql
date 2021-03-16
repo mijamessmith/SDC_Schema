@@ -58,3 +58,10 @@ CREATE TABLE characteristics (
   FOREIGN KEY (reviewId) references reviews (reviewId)
 );
 
+CREATE TABLE reviewResponse (
+  responseId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR (30),
+  reviewId INT NOT NULL,
+  body varchar(10000) NOT NULL,
+  FOREIGN KEY (reviewId) references reviews(reviewId)
+);
