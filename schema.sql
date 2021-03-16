@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS reviewMetadata (
   ratingOf3 INT DEFAULT 0,
   ratingOf4 INT DEFAULT 0,
   ratingOf5 INT DEFAULT 0,
-  isReported BOOLEAN DEFAULT false,
+  isReported BIT DEFAULT 0,
   helpfulnessTotal INT DEFAULT 0
 );
 
@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS reviews (
   summary varchar (90) NOT NULL,
   date DATETIME NOT NULL,
   helpfulness int DEFAULT 0,
-  rating SMALL INT NOT NULL,
-  reported BOOLEAN NOT NULL DEFAULT false,
-  photos BOOLEAN NOT NULL,
+  rating TINYINT NOT NULL,
+  reported BIT NOT NULL DEFAULT 0,
+  photos BIT NOT NULL,
   FOREIGN KEY (productId) references reviewMetadata (productId),
   FOREIGN KEY (reviewerId) references reviewers (reviewerId)
 );
@@ -48,12 +48,12 @@ CREATE TABLE IF NOT EXISTS photos (
   FOREIGN KEY (reviewerId) references reviewers (reviewerId)
 );
 
-CREATE TABLE characteristicRatings (
+CREATE TABLE characteristics (
   characteristicId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   productId INT NOT NULL,
   reviewId INT NOT NULL,
-  characteristic varchar(16) NOT NULL,
-  rating SMALL INT NOT NULL,
+  characteristic ENUM('fit', 'width', 'size', 'length', 'comfort') NOT NULL,
+  rating TINYINT NOT NULL,
   FOREIGN KEY (productId) references reviewMetadata (productId),
   FOREIGN KEY (reviewId) references reviews (reviewId)
 );
