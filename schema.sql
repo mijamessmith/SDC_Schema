@@ -4,10 +4,8 @@ USE sdcReviews;
 
 CREATE TABLE IF NOT EXISTS reviewers (
   reviewerId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name varchar(50) NOT NULL,
-  email varchar(40) NOT NULL,
-  numOfReported int DEFAULT 0,
-  numOfReviews int DEFAULT 0
+  name varchar(40) NOT NULL,
+  email varchar(320) NOT NULL,
 );
 
 
@@ -20,31 +18,27 @@ CREATE TABLE IF NOT EXISTS reviewMetadata (
   ratingOf3 INT DEFAULT 0,
   ratingOf4 INT DEFAULT 0,
   ratingOf5 INT DEFAULT 0,
-  isReported BIT DEFAULT 0,
-  helpfulnessTotal INT DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS reviews (
   reviewId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  reviewerId int NOT NULL,
   productId int NOT NULL,
-  body varchar (10000) NOT NULL,
-  summary varchar (90) NOT NULL,
-  date DATETIME NOT NULL,
-  helpfulness int DEFAULT 0,
   rating TINYINT NOT NULL,
-  reported BIT NOT NULL DEFAULT 0,
-  photos BIT NOT NULL,
-  FOREIGN KEY (productId) references reviewMetadata (productId),
+  date varchar(25) NOT NULL,
+  summary varchar (50) NOT NULL,
+  body varchar (1002) NOT NULL,
+  recommended bit not null,
+  reported INT NOT NULL DEFAULT 0,
+  helpfulness int DEFAULT 0,
+  response varchar(500) DEFAULT null,
+  reviewerId int NOT NULL,
   FOREIGN KEY (reviewerId) references reviewers (reviewerId)
 );
 
 CREATE TABLE IF NOT EXISTS photos (
   photoId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
   reviewId int NOT NULL,
-  reviewerId int NOT NULL,
   url varchar(255),
-  FOREIGN KEY(reviewId) references reviews(reviewId),
   FOREIGN KEY (reviewerId) references reviewers (reviewerId)
 );
 
@@ -54,14 +48,5 @@ CREATE TABLE characteristics (
   reviewId INT NOT NULL,
   characteristic ENUM('fit', 'width', 'size', 'length', 'comfort') NOT NULL,
   rating TINYINT NOT NULL,
-  FOREIGN KEY (productId) references reviewMetadata (productId),
   FOREIGN KEY (reviewId) references reviews (reviewId)
-);
-
-CREATE TABLE reviewResponse (
-  responseId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  email VARCHAR (30),
-  reviewId INT NOT NULL,
-  body varchar(10000) NOT NULL,
-  FOREIGN KEY (reviewId) references reviews(reviewId)
 );

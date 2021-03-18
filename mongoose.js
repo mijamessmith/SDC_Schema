@@ -1,25 +1,31 @@
 const review = new Schema({
-  reviewerEmail: String,
-  summary: String,
-  body: String,
-  rating: Number,
-  reported: Boolean,
-  recommended: Boolean,
-  photos: Array,
-  quality: Number,
-  fit: Number,
-  width: Number,
-  size: Number,
-  length: Number,
-  comfort: Number,
-  date: String,
-  productId: Number
-})
-
-const reviewer = new Schema({
+  productId: Number,
   firstName: String,
   lastName: String,
   email: String,
+  summary: String,
+  body: String,
+  rating: Number,
+  reported: {type: Boolean, default: false},
+  recommended: Boolean,
+  photos: Array,
+  characteristics: {
+    quality: Number,
+    fit: Number,
+    width: Number,
+    size: Number,
+    length: Number,
+    comfort: Number,
+    },
+  date: String,
+})
+
+const reviewResponses = new Schema({
+  reviewId: Number,
+  response: [{
+    body: String,
+    email: String,
+  }],
 })
 
 const productMeta = new Schema({

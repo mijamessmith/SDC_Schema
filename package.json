@@ -1,0 +1,23 @@
+{
+  "name": "sdc_schema",
+  "version": "1.0.0",
+  "description": "** Refer to Schema file",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mijamessmith/SDC_Schema.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mijamessmith/SDC_Schema/issues"
+  },
+  "homepage": "https://github.com/mijamessmith/SDC_Schema#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.5.1"
+  }
+}
