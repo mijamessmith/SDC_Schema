@@ -14,39 +14,42 @@ response - no default to null
 helpfulness - no default to 0
 
 
+//fs.createReadStream
+//use events to control the reading and writing process. drain, on, close, etc.
 */
 
 const fs = require('fs');
 const readline = require('readline');
-
-const readInterface = readline.createInterface({
-  input: fs.createreadStream(path),
-  output: process.stdout
-})
-
+const path = require('path');
 
 function removeDoubleQuotes(str) {
   return str.replace(/"/g,"");
 }
 
 function getRowFromCsv(path) {
-  const readInterface = readline.createInterface({
-    input: fs.createreadStream(path),
-    output: process.stdout
-  });
-  let badcount = 0;
-  let goodcount = 0;
-  readInterface.on('line', function (line) {
-    if (line.substring(0, 2) !== 'id');
-    var isOk = scrubReviewRow(line);
-    if (!isOk) {
-      badcount++
-    } else {
-      goodcount++;
-    }
-  })
-  console.log('goodcount: ', goodcount);
-  console.log('badcount: ', badcount);
+  var pathCsv = '../../csv-raw-data/filteredReviewSample.csv';
+    const readInterface = readline.createInterface({
+      input: fs.createReadStream(path),
+      output: node --inspect-brk reviewsScrub.js
+    });
+    var badcount = 0;
+    var goodcount = 0;
+    readInterface
+    .on('line', function (line) {
+      if (line.substring(0, 2) !== 'id') {
+        var checkedLine = scrubReviewRow(line);
+        if (!checkedLine) {
+          console.log('bad')
+        } else {
+          fs.appendFile(pathCsv, checkedLine + '\n', (err, data) => {
+            if (err) console.log(err);
+          })
+        }
+      } else {
+        consol
+        e.log('firstline')
+      }
+    })
 }
 
 function scrubReviewRow(rowStr) {
@@ -63,7 +66,7 @@ function scrubReviewRow(rowStr) {
   if (!checkReviewId(row[0])) return false;
   if (!checkProductId(row[1])) return false;
   if (!checkRating(row[2])) return false;
-  if (!checkDate(row[3]))
+  if (!checkDate(row[3])) return false;
   if (!checkSummary(row[4])) return false;
   if (!checkBody(row[5])) return false;
   if (!checkRecommended(row[6])) return false;
@@ -73,8 +76,17 @@ function scrubReviewRow(rowStr) {
   if (!checkResponse(row[10])) return false;
   if (!checkHelpfulness(row[11])) return false;
 
-  return true;
+  return row.join(',');
 }
+
+(function invokenow(){
+  try {
+    getRowFromCsv('../../csv-raw-data/reviews.csv')
+  } catch (err) {
+    console.log(err);
+  }
+
+})()
 
 function checkReviewId(id) {
   if(id === 'null' ) {
@@ -221,4 +233,5 @@ function checkHelpfulness(help) {
   if (Number(help) % 1 !== 0) {
     return false;
   }
+  return true;
 }
