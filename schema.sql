@@ -2,24 +2,6 @@ CREATE DATABASE IF NOT EXISTS sdcReviews;
 
 USE sdcReviews;
 
-CREATE TABLE IF NOT EXISTS reviewers (
-  reviewerId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name varchar(40) NOT NULL,
-  email varchar(320) NOT NULL,
-);
-
-
-CREATE TABLE IF NOT EXISTS reviewMetadata (
-  productId INT PRIMARY KEY NOT NULL,
-  recommendTrueCount INT DEFAULT 0,
-  recommendFalseCount INT DEFAULT 0,
-  ratingOf1 INT DEFAULT 0,
-  ratingOf2 INT DEFAULT 0,
-  ratingOf3 INT DEFAULT 0,
-  ratingOf4 INT DEFAULT 0,
-  ratingOf5 INT DEFAULT 0,
-);
-
 CREATE TABLE IF NOT EXISTS reviews (
   reviewId SERIAL NOT NULL PRIMARY KEY,
   productId int NOT NULL,
@@ -29,10 +11,10 @@ CREATE TABLE IF NOT EXISTS reviews (
   body varchar (1002) NOT NULL,
   recommended bit not null,
   reported INT NOT NULL DEFAULT 0,
-  helpfulness int DEFAULT 0,
+  reviewerName varchar(40) NOT NULL,
+  reviewerEmail varchar(320) NOT NULL,
   response varchar(500) DEFAULT null,
-  reviewerId int NOT NULL,
-  FOREIGN KEY (reviewerId) references reviewers (reviewerId)
+  helpfulness int DEFAULT 0,
 );
 
 CREATE TABLE IF NOT EXISTS photos (
