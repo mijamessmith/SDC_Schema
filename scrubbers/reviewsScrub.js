@@ -17,7 +17,37 @@ helpfulness - no default to 0
 */
 
 const fs = require('fs');
+const readline = require('readline');
 
+const readInterface = readline.createInterface({
+  input: fs.createreadStream(path),
+  output: process.stdout
+})
+
+
+function removeDoubleQuotes(str) {
+  return str.replace(/"/g,"");
+}
+
+function getRowFromCsv(path) {
+  const readInterface = readline.createInterface({
+    input: fs.createreadStream(path),
+    output: process.stdout
+  });
+  let badcount = 0;
+  let goodcount = 0;
+  readInterface.on('line', function (line) {
+    if (line.substring(0, 2) !== 'id');
+    var isOk = scrubReviewRow(line);
+    if (!isOk) {
+      badcount++
+    } else {
+      goodcount++;
+    }
+  })
+  console.log('goodcount: ', goodcount);
+  console.log('badcount: ', badcount);
+}
 
 function scrubReviewRow(rowStr) {
   //check length of array to match num of cols
@@ -25,6 +55,11 @@ function scrubReviewRow(rowStr) {
   if (row.length !== 12) {
     return false;
   }
+
+  for (let i = 0; i < row.length; i++) {
+    row[i] = removeDoubleQuotes(row[i]);
+  }
+
   if (!checkReviewId(row[0])) return false;
   if (!checkProductId(row[1])) return false;
   if (!checkRating(row[2])) return false;
