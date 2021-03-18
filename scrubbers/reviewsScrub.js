@@ -30,7 +30,7 @@ function getRowFromCsv(path) {
   var pathCsv = '../../csv-raw-data/filteredReviewSample.csv';
     const readInterface = readline.createInterface({
       input: fs.createReadStream(path),
-      output: node --inspect-brk reviewsScrub.js
+      output: fs.createWriteStream(pathCsv)
     });
     var badcount = 0;
     var goodcount = 0;
@@ -38,16 +38,10 @@ function getRowFromCsv(path) {
     .on('line', function (line) {
       if (line.substring(0, 2) !== 'id') {
         var checkedLine = scrubReviewRow(line);
-        if (!checkedLine) {
-          console.log('bad')
+        if (checkedLine)
+          readInterface.output.write(checkedLine);
         } else {
-          fs.appendFile(pathCsv, checkedLine + '\n', (err, data) => {
-            if (err) console.log(err);
-          })
-        }
-      } else {
-        consol
-        e.log('firstline')
+        readInterface.output.write(line);
       }
     })
 }

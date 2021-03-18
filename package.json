@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mijamessmith/SDC_Schema#readme",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "express": "^4.17.1",
     "pg": "^8.5.1"
   }
