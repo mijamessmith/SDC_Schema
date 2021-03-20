@@ -16,6 +16,10 @@ helpfulness - no default to 0
 
 //fs.createReadStream
 //use events to control the reading and writing process. drain, on, close, etc.
+
+postgres command:
+\copy reviews (review_id,product_id,rating,date,summary,body,recommend,reported,reviewer_name,reviewer_email,response,helpfulness) FROM 'Users/michaelsmith/Documents/code/HR/SDC/csv-raw-data/filteredReview.csv' CSV;
+
 */
 
 const fs = require('fs');
@@ -27,27 +31,32 @@ function removeDoubleQuotes(str) {
 }
 
 function getRowFromCsv(path) {
-  var pathCsv = '../../csv-raw-data/filteredReviewSample.csv';
-    const readInterface = readline.createInterface({
-      input: fs.createReadStream(path),
-      output: fs.createWriteStream(pathCsv)
-    });
-    var badcount = 0;
-    var goodcount = 0;
-    readInterface
-    .on('line', function (line) {
-      if (line.substring(0, 2) !== 'id') {
+  var pathCsv = '../../csv-raw-data/filteredReview.csv';
+  var pathToDisgard = '../../csv-raw-data/disgarded-reviews.csv';
+  const readInterface = readline.createInterface({
+    input: fs.createReadStream(path),
+    output: fs.createWriteStream(pathCsv),
+  });
+
+
+
+    readInterface.on('line', function (line) {
+      if (line.substring(0, 9) !== 'review_id') {
         var checkedLine = scrubReviewRow(line);
-        if (checkedLine)
+        if (checkedLine) {
           readInterface.output.write(checkedLine);
         } else {
-        readInterface.output.write(line);
+
+        }
+      } else {
+        readInterface.output.write(line + '\n');
       }
     })
 }
 
 function scrubReviewRow(rowStr) {
   //check length of array to match num of cols
+  //let row = rowStr.split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
   let row = rowStr.split(',');
   if (row.length !== 12) {
     return false;
@@ -70,7 +79,7 @@ function scrubReviewRow(rowStr) {
   if (!checkResponse(row[10])) return false;
   if (!checkHelpfulness(row[11])) return false;
 
-  return row.join(',');
+  return row.join(',') + '\n';
 }
 
 (function invokenow(){
@@ -229,3 +238,5 @@ function checkHelpfulness(help) {
   }
   return true;
 }
+
+
